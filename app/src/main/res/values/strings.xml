@@ -39,6 +39,7 @@
     <string name="discord_status_connected">подключено</string>
     <string name="discord_status_error">ошибка: %1$s</string>
     <string name="settings_about">О программе</string>
+    <string name="settings_debug_fixtures">Отладка: фикстуры плеера</string>
 
     <!-- О программе -->
     <string name="about_title">О программе</string>

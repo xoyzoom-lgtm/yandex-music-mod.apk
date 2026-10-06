@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import io.github.xoyzoom.ymmod.debug.DebugTools
 import io.github.xoyzoom.ymmod.playback.PlaybackService
 import io.github.xoyzoom.ymmod.presence.PresenceSinks
 import io.github.xoyzoom.ymmod.settings.AppSettings
@@ -46,7 +47,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-private enum class Screen { PLAYER, SETTINGS, ABOUT }
+private enum class Screen { PLAYER, SETTINGS, ABOUT, DEBUG }
 
 class MainActivity : ComponentActivity() {
     private lateinit var web: YandexWebView
@@ -147,7 +148,7 @@ private fun AppRoot(activity: ComponentActivity, web: YandexWebView, container: 
         if (web.view.canGoBack()) web.view.goBack() else activity.moveTaskToBack(true)
     }
     BackHandler(enabled = screen != Screen.PLAYER) {
-        screen = if (screen == Screen.ABOUT) Screen.SETTINGS else Screen.PLAYER
+        screen = if (screen == Screen.ABOUT || screen == Screen.DEBUG) Screen.SETTINGS else Screen.PLAYER
     }
 
     YmModTheme(settings.themeMode) {
@@ -176,8 +177,10 @@ private fun AppRoot(activity: ComponentActivity, web: YandexWebView, container: 
                         onDiscordEnabledChange = { scope.launch { container.settings.setDiscordEnabled(it) } },
                         onOpenAbout = { screen = Screen.ABOUT },
                         onBack = { screen = Screen.PLAYER },
+                        onOpenDebug = if (DebugTools.AVAILABLE) ({ screen = Screen.DEBUG }) else null,
                     )
                     Screen.ABOUT -> AboutScreen(onBack = { screen = Screen.SETTINGS })
+                    Screen.DEBUG -> DebugTools.Screen(container, onBack = { screen = Screen.SETTINGS })
                 }
             }
         }

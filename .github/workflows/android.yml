@@ -44,6 +44,9 @@ jobs:
       - name: Debug APK
         run: ./gradlew --no-daemon assembleDebug
 
+      - name: Компиляция release-варианта
+        run: ./gradlew --no-daemon compileReleaseKotlin
+
       - uses: actions/upload-artifact@v4
         with:
           name: ymmod-debug-apk

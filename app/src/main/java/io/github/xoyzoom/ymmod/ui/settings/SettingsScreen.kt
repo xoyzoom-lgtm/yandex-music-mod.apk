@@ -47,6 +47,7 @@ fun SettingsScreen(
     onDiscordEnabledChange: (Boolean) -> Unit,
     onOpenAbout: () -> Unit,
     onBack: () -> Unit,
+    onOpenDebug: (() -> Unit)? = null,
 ) {
     ScreenScaffold(title = stringResource(R.string.settings_title), onBack = onBack) {
         SectionTitle(stringResource(R.string.settings_section_appearance))
@@ -92,9 +93,15 @@ fun SettingsScreen(
         Hint(stringResource(R.string.settings_discord_hint))
 
         HorizontalDivider(Modifier.padding(top = 16.dp))
-        OutlinedButton(onClick = onOpenAbout, modifier = Modifier.padding(vertical = 16.dp)) {
+        OutlinedButton(onClick = onOpenAbout, modifier = Modifier.padding(top = 16.dp)) {
             Text(stringResource(R.string.settings_about))
         }
+        if (onOpenDebug != null) {
+            OutlinedButton(onClick = onOpenDebug, modifier = Modifier.padding(top = 8.dp)) {
+                Text(stringResource(R.string.settings_debug_fixtures))
+            }
+        }
+        Spacer(Modifier.height(16.dp))
     }
 }
 
