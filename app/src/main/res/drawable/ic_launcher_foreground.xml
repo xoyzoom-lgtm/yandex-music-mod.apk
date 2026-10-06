@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Нота на фоне 108x108 (безопасная зона адаптивной иконки — центральные 66dp). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFD54F"
+        android:pathData="M62,34 L62,62.6 C60.4,61.6 58.5,61 56.5,61 C50.7,61 46,65 46,70 C46,75 50.7,79 56.5,79 C62.3,79 67,75 67,70 L67,44 L76,44 L76,34 Z" />
+    <path
+        android:fillColor="#FFB388FF"
+        android:pathData="M32,40 L52,40 L52,45 L32,45 Z M32,50 L52,50 L52,55 L32,55 Z M32,60 L44,60 L44,65 L32,65 Z" />
+</vector>

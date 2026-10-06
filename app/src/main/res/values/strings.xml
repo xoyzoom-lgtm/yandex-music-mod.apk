@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">YM Mod</string>
+
+    <!-- Главный экран -->
+    <string name="action_reload">Обновить страницу</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_back">Назад</string>
+    <string name="nothing_playing">Ничего не играет</string>
+
+    <!-- Настройки -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_section_appearance">Оформление</string>
+    <string name="settings_theme">Тема приложения</string>
+    <string name="theme_system">Как в системе</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="settings_theme_hint">Сайт подстраивается под тему, если в настройках Яндекс Музыки выбрана «Системная».</string>
+    <string name="settings_font">Шрифт</string>
+    <string name="font_site_default">Как на сайте</string>
+    <string name="font_roboto">Roboto</string>
+    <string name="font_serif">С засечками (Noto Serif)</string>
+    <string name="font_mono">Моноширинный</string>
+    <string name="font_condensed">Узкий (Roboto Condensed)</string>
+    <string name="font_custom">Свой шрифт (Bunny Fonts)</string>
+    <string name="settings_custom_font_label">Название шрифта</string>
+    <string name="settings_custom_font_hint">Например, JetBrains Mono. Шрифт загружается с fonts.bunny.net.</string>
+    <string name="action_apply">Применить</string>
+    <string name="settings_section_site">Сайт</string>
+    <string name="settings_desktop_mode">Полная (десктопная) версия</string>
+    <string name="settings_desktop_mode_hint">Страница перезагрузится.</string>
+    <string name="settings_section_discord">Discord</string>
+    <string name="settings_discord_enabled">Показывать трек в профиле Discord</string>
+    <string name="settings_discord_status">Статус: %1$s</string>
+    <string name="discord_status_disabled">выключено</string>
+    <string name="discord_status_not_configured">модуль Discord ещё не подключён (следующий этап)</string>
+    <string name="discord_status_connecting">подключение…</string>
+    <string name="discord_status_connected">подключено</string>
+    <string name="discord_status_error">ошибка: %1$s</string>
+    <string name="settings_about">О программе</string>
+
+    <!-- О программе -->
+    <string name="about_title">О программе</string>
+    <string name="about_version">Версия %1$s</string>
+    <string name="about_description">Неофициальный Android-клиент для веб-версии Яндекс Музыки с интеграцией Discord, выбором шрифтов и тёмной темой.</string>
+    <string name="about_based_on_title">Основано на проекте</string>
+    <string name="about_based_on">Идея и часть логики взяты из десктопного мода Vzlomhik2005/Yandex-Music-Mod (лицензия MIT) и переделаны под Android.</string>
+    <string name="about_original_repo">Открыть оригинальный репозиторий</string>
+    <string name="about_this_repo">Открыть репозиторий Android-версии</string>
+    <string name="about_disclaimer_title">Важно</string>
+    <string name="about_disclaimer">Приложение не связано с ООО «Яндекс» и Discord Inc. Оно открывает официальную веб-версию Яндекс Музыки: вход выполняется через Яндекс ID, а качество звука, реклама и доступ к трекам определяются вашей подпиской.</string>
+    <string name="about_licenses_title">Лицензии</string>
+    <string name="about_license_this">Лицензия этого приложения (MIT)</string>
+    <string name="about_license_original">Лицензия оригинального проекта (MIT)</string>
+
+    <!-- Уведомление -->
+    <string name="notification_channel_playback">Воспроизведение</string>
+    <string name="notification_channel_playback_description">Управление музыкой, пока приложение свёрнуто</string>
+    <string name="notification_action_previous">Предыдущий</string>
+    <string name="notification_action_play">Играть</string>
+    <string name="notification_action_pause">Пауза</string>
+    <string name="notification_action_next">Следующий</string>
+</resources>
