@@ -10,6 +10,10 @@ on:
 permissions:
   contents: read
 
+env:
+  # Application ID приложения в Discord Developer Portal (Settings → Variables → Actions).
+  DISCORD_APPLICATION_ID: ${{ vars.DISCORD_APPLICATION_ID }}
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -28,6 +32,11 @@ jobs:
           java-version: "17"
 
       - uses: gradle/actions/setup-gradle@v4
+
+      - name: Discord Social SDK
+        env:
+          DISCORD_SDK_AAR_URL: ${{ secrets.DISCORD_SDK_AAR_URL }}
+        run: .github/scripts/fetch-discord-sdk.sh
 
       - name: Unit-тесты и lint
         run: ./gradlew --no-daemon testDebugUnitTest lintDebug
@@ -64,6 +73,11 @@ jobs:
           java-version: "17"
 
       - uses: gradle/actions/setup-gradle@v4
+
+      - name: Discord Social SDK
+        env:
+          DISCORD_SDK_AAR_URL: ${{ secrets.DISCORD_SDK_AAR_URL }}
+        run: .github/scripts/fetch-discord-sdk.sh
 
       - name: Ключ подписи
         id: keystore

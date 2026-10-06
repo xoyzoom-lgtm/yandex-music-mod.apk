@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import io.github.xoyzoom.ymmod.playback.PlaybackService
+import io.github.xoyzoom.ymmod.presence.PresenceSinks
 import io.github.xoyzoom.ymmod.settings.AppSettings
 import io.github.xoyzoom.ymmod.settings.ThemeMode
 import io.github.xoyzoom.ymmod.settings.toFontSpec
@@ -59,6 +60,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val container = appContainer
+        PresenceSinks.onActivityCreated(this)
+        container.presence.start()
         web = YandexWebView(this, container)
 
         lifecycleScope.launch {

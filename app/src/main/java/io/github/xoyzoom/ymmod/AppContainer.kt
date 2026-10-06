@@ -3,7 +3,7 @@ package io.github.xoyzoom.ymmod
 import android.content.Context
 import io.github.xoyzoom.ymmod.player.PlayerCommandBus
 import io.github.xoyzoom.ymmod.player.PlayerStateRepository
-import io.github.xoyzoom.ymmod.presence.LoggingPresenceSink
+import io.github.xoyzoom.ymmod.presence.PresenceSinks
 import io.github.xoyzoom.ymmod.presence.PresenceController
 import io.github.xoyzoom.ymmod.settings.SettingsRepository
 import kotlinx.coroutines.CoroutineScope
@@ -16,5 +16,5 @@ class AppContainer(context: Context) {
     val settings = SettingsRepository(context)
     val player = PlayerStateRepository()
     val commands = PlayerCommandBus()
-    val presence = PresenceController(player, settings, LoggingPresenceSink(), appScope)
+    val presence = PresenceController(player, settings, PresenceSinks.create(), appScope)
 }

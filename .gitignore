@@ -11,3 +11,5 @@
 .cxx/
 *.keystore
 *.jks
+# Discord Social SDK нельзя публиковать в репозитории
+/app/libs/*.aar

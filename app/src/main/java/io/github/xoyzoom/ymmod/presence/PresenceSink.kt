@@ -14,9 +14,8 @@ sealed interface PresenceStatus {
 }
 
 /**
- * Куда отправляется активность. Реализация на Discord Social SDK подключается на следующем
- * этапе: SDK распространяется через Discord Developer Portal и требует Application ID,
- * поэтому в репозиторий он не входит.
+ * Куда отправляется активность. Реализация выбирается при сборке (см. PresenceSinks):
+ * с Discord Social SDK, если `app/libs/discord_partner_sdk.aar` есть, иначе [LoggingPresenceSink].
  */
 interface PresenceSink {
     val status: StateFlow<PresenceStatus>
@@ -26,7 +25,7 @@ interface PresenceSink {
     suspend fun setEnabled(enabled: Boolean)
 }
 
-/** Временная реализация: только пишет активность в logcat (тег YmModPresence). */
+/** Сборка без Discord Social SDK: только пишет активность в logcat (тег YmModPresence). */
 class LoggingPresenceSink : PresenceSink {
     private val _status = MutableStateFlow<PresenceStatus>(PresenceStatus.NotConfigured)
     override val status: StateFlow<PresenceStatus> = _status.asStateFlow()

@@ -27,7 +27,7 @@
 | Десктопная версия сайта по переключателю | ✅ |
 | Экран «О программе» с лицензиями | ✅ |
 | Сборка APK в GitHub Actions и публикация в Releases | ✅ |
-| Discord Rich Presence через Discord Social SDK | 🚧 этап 2 — данные уже собираются, осталось подключить SDK |
+| Discord Rich Presence через Discord Social SDK («Слушает …» с обложкой и таймером) | ✅ в сборке с SDK (см. ниже) |
 
 ## Установка
 
@@ -54,6 +54,8 @@ app/src/main/
 │   ├── settings/                    # DataStore: тема, шрифт, десктоп-режим, Discord
 │   └── ui/                          # Jetpack Compose: плеер, настройки, «О программе», тема
 └── res/
+app/src/presenceDiscord/             # сборка с Discord Social SDK: Kotlin + JNI (C++/CMake)
+app/src/presenceStub/                # сборка без SDK: заглушка
 ```
 
 **Чтение плеера.** Оригинал достаёт данные из React Fiber десктопной разметки (`PLAYERBAR_DESKTOP`),
@@ -64,10 +66,32 @@ app/src/main/
 (в отличие от `addJavascriptInterface`, видимого любому сайту).
 
 **Discord.** `PresenceController` превращает состояние плеера в `RichPresence` (название, исполнитель,
-обложка, таймер) и передаёт его в `PresenceSink`. Сейчас подключён `LoggingPresenceSink`, который пишет
-в logcat (`adb logcat -s YmModPresence`). На этапе 2 сюда встанет реализация на
-[Discord Social SDK](https://discord.com/developers/docs/discord-social-sdk/overview): SDK скачивается
-из Discord Developer Portal под его собственной лицензией, поэтому в репозиторий не кладётся.
+обложка, таймер) и передаёт его в `PresenceSink`. В сборке с SDK это `DiscordSocialPresenceSink`:
+JNI-модуль (`app/src/presenceDiscord/cpp`) вызывает `discordpp::Client::SetApplicationId` и
+`UpdateRichPresence` с типом *Listening*. Используется режим
+[Rich Presence без авторизации](https://discord.com/developers/docs/discord-social-sdk/development-guides/setting-rich-presence#rich-presence-without-authentication)
+(Social SDK 1.10+): активность передаётся в установленное приложение Discord, OAuth не нужен.
+В сборке без SDK используется `LoggingPresenceSink`, который пишет в logcat (`adb logcat -s YmModPresence`).
+
+## Подключение Discord Rich Presence
+
+[Discord Social SDK](https://discord.com/developers/docs/discord-social-sdk/overview) распространяется
+только через Discord Developer Portal под лицензией Discord, поэтому в репозиторий он не входит.
+Без него приложение собирается и работает, просто без Discord.
+
+1. Создайте приложение в [Discord Developer Portal](https://discord.com/developers/applications)
+   и включите для него Social SDK. Название приложения увидят в профиле: «Слушает *название*».
+2. Скачайте Social SDK для Android версии **1.10 или новее** и возьмите из него `discord_partner_sdk.aar`.
+3. **Локальная сборка:** положите файл в `app/libs/discord_partner_sdk.aar` и укажите ID
+   в `~/.gradle/gradle.properties`: `discordApplicationId=123456789012345678`.
+4. **GitHub Actions:**
+   - переменная репозитория `DISCORD_APPLICATION_ID` (*Settings → Secrets and variables → Actions → Variables*);
+   - секрет `DISCORD_SDK_AAR_URL` — прямая ссылка на `.aar` или zip SDK в приватном хранилище.
+     Скрипт `.github/scripts/fetch-discord-sdk.sh` скачает его перед сборкой.
+
+У пользователя должно быть установлено приложение Discord с выполненным входом. Статус соединения
+виден в настройках YM Mod. Разрешения SDK для голосового чата (микрофон, Bluetooth) из манифеста
+убраны — приложение их не запрашивает.
 
 ## Сборка
 

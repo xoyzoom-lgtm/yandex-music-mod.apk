@@ -89,6 +89,7 @@ fun SettingsScreen(
             checked = settings.discordEnabled,
             onCheckedChange = onDiscordEnabledChange,
         )
+        Hint(stringResource(R.string.settings_discord_hint))
 
         HorizontalDivider(Modifier.padding(top = 16.dp))
         OutlinedButton(onClick = onOpenAbout, modifier = Modifier.padding(vertical = 16.dp)) {

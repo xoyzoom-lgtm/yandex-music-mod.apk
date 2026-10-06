@@ -20,7 +20,13 @@ class PresenceController(
 ) {
     val status: StateFlow<PresenceStatus> get() = sink.status
 
+    private var started = false
+
+    /** Запускается из активити: Discord Social SDK требует активити до первого вызова. */
     fun start() {
+        if (started) return
+        started = true
+
         val enabled = settings.settings
             .map { it.discordEnabled }
             .distinctUntilChanged()

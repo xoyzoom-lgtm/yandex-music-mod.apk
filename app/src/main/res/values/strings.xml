@@ -32,8 +32,9 @@
     <string name="settings_section_discord">Discord</string>
     <string name="settings_discord_enabled">Показывать трек в профиле Discord</string>
     <string name="settings_discord_status">Статус: %1$s</string>
+    <string name="settings_discord_hint">Нужно установленное приложение Discord, в котором выполнен вход. Трек показывается, пока музыка играет.</string>
     <string name="discord_status_disabled">выключено</string>
-    <string name="discord_status_not_configured">модуль Discord ещё не подключён (следующий этап)</string>
+    <string name="discord_status_not_configured">эта сборка без Discord Social SDK или Application ID (см. README)</string>
     <string name="discord_status_connecting">подключение…</string>
     <string name="discord_status_connected">подключено</string>
     <string name="discord_status_error">ошибка: %1$s</string>
