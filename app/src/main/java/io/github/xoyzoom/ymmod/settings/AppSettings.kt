@@ -42,8 +42,11 @@ data class AppSettings(
     val autoBestQuality: Boolean = true,
     /** Не показывать окно «Скачайте приложение Яндекс Музыки». */
     val hideAppPromo: Boolean = true,
-    /** Не загружать счётчики аналитики (Яндекс Метрика). */
-    val blockTrackers: Boolean = true,
+    /**
+     * Не загружать счётчики аналитики (Яндекс Метрика). По умолчанию выключено:
+     * с блокировкой на части устройств сайт оставался на чёрной заставке.
+     */
+    val blockTrackers: Boolean = false,
     val snowEffect: Boolean = false,
     /** Масштаб текста сайта, % (WebSettings.textZoom). */
     val uiScale: Int = DEFAULT_UI_SCALE,
