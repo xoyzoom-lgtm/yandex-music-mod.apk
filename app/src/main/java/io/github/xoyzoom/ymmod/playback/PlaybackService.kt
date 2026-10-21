@@ -12,6 +12,7 @@ import android.content.pm.ServiceInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.os.Bundle
 import android.os.IBinder
 import android.os.SystemClock
 import android.support.v4.media.MediaMetadataCompat
@@ -62,6 +63,10 @@ class PlaybackService : Service() {
                 override fun onPause() = send(PlayerCommand.PAUSE)
                 override fun onSkipToNext() = send(PlayerCommand.NEXT)
                 override fun onSkipToPrevious() = send(PlayerCommand.PREVIOUS)
+                override fun onSeekTo(pos: Long) = appContainer.commands.seekTo(pos)
+                override fun onCustomAction(action: String?, extras: Bundle?) {
+                    if (action == ACTION_LIKE) send(PlayerCommand.LIKE)
+                }
             })
             setSessionActivity(contentIntent())
             isActive = true
@@ -81,6 +86,10 @@ class PlaybackService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent?.action == ACTION_LIKE) {
+            send(PlayerCommand.LIKE)
+            return START_NOT_STICKY
+        }
         MediaButtonReceiver.handleIntent(session, intent)
         return START_NOT_STICKY
     }
@@ -130,7 +139,15 @@ class PlaybackService : Service() {
                         PlaybackStateCompat.ACTION_PAUSE or
                         PlaybackStateCompat.ACTION_PLAY_PAUSE or
                         PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
-                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS,
+                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+                        (if (state.hasPosition && state.durationMs > 0) PlaybackStateCompat.ACTION_SEEK_TO else 0L),
+                )
+                .addCustomAction(
+                    PlaybackStateCompat.CustomAction.Builder(
+                        ACTION_LIKE,
+                        getString(R.string.notification_action_like),
+                        if (state.liked == true) R.drawable.ic_heart else R.drawable.ic_heart_outline,
+                    ).build(),
                 )
                 .setState(
                     if (state.isPlaying) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED,
@@ -177,6 +194,7 @@ class PlaybackService : Service() {
             .addAction(action(android.R.drawable.ic_media_previous, R.string.notification_action_previous, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS))
             .addAction(playPause)
             .addAction(action(android.R.drawable.ic_media_next, R.string.notification_action_next, PlaybackStateCompat.ACTION_SKIP_TO_NEXT))
+            .addAction(likeAction(state.liked == true))
             .setStyle(
                 androidx.media.app.NotificationCompat.MediaStyle()
                     .setMediaSession(session.sessionToken)
@@ -189,6 +207,17 @@ class PlaybackService : Service() {
         icon,
         getString(title),
         MediaButtonReceiver.buildMediaButtonPendingIntent(this, mediaAction),
+    )
+
+    private fun likeAction(liked: Boolean) = NotificationCompat.Action(
+        if (liked) R.drawable.ic_heart else R.drawable.ic_heart_outline,
+        getString(R.string.notification_action_like),
+        PendingIntent.getService(
+            this,
+            REQUEST_LIKE,
+            Intent(this, PlaybackService::class.java).setAction(ACTION_LIKE),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        ),
     )
 
     private fun contentIntent(): PendingIntent = PendingIntent.getActivity(
@@ -225,6 +254,8 @@ class PlaybackService : Service() {
         private const val CHANNEL_ID = "playback"
         private const val NOTIFICATION_ID = 1
         private const val MAX_ARTWORK_BYTES = 4 * 1024 * 1024
+        private const val ACTION_LIKE = "io.github.xoyzoom.ymmod.action.LIKE"
+        private const val REQUEST_LIKE = 2
 
         @Volatile
         var isRunning: Boolean = false

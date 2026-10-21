@@ -2,11 +2,15 @@ package io.github.xoyzoom.ymmod.web
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.webkit.CookieManager
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import io.github.xoyzoom.ymmod.AppContainer
+import io.github.xoyzoom.ymmod.settings.AppSettings
+import io.github.xoyzoom.ymmod.settings.toFontSpec
+import io.github.xoyzoom.ymmod.settings.toPageConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,10 +20,12 @@ class YandexWebView(context: Context, container: AppContainer) {
     val bridge = BridgeController(
         script = context.assets.open(SCRIPT_ASSET).bufferedReader().use { it.readText() },
         player = container.player,
+        events = container.pageEvents,
     )
 
     private val defaultUserAgent = WebSettings.getDefaultUserAgent(context)
     private var desktopMode: Boolean? = null
+    private lateinit var client: YandexWebViewClient
 
     private val _progress = MutableStateFlow(0)
     /** Прогресс загрузки страницы 0..100. */
@@ -43,6 +49,8 @@ class YandexWebView(context: Context, container: AppContainer) {
                 allowFileAccess = false
                 allowContentAccess = false
             }
+            // Без «пружины» в конце прокрутки страница ведёт себя как нативный экран.
+            overScrollMode = WebView.OVER_SCROLL_NEVER
 
             CookieManager.getInstance().apply {
                 setAcceptCookie(true)
@@ -50,7 +58,8 @@ class YandexWebView(context: Context, container: AppContainer) {
                 setAcceptThirdPartyCookies(webView, true)
             }
 
-            webViewClient = YandexWebViewClient(bridge) { container.player.reset() }
+            client = YandexWebViewClient(bridge) { container.player.reset() }
+            webViewClient = client
             webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView, newProgress: Int) {
                     _progress.value = newProgress
@@ -62,8 +71,20 @@ class YandexWebView(context: Context, container: AppContainer) {
         return webView
     }
 
-    /** Устанавливает user agent; возвращает true, если он изменился и страницу надо перезагрузить. */
-    fun applyDesktopMode(enabled: Boolean): Boolean {
+    /**
+     * Применяет настройки к WebView. Возвращает true, если поменялся user agent
+     * и открытую страницу нужно перезагрузить.
+     */
+    fun apply(settings: AppSettings): Boolean {
+        bridge.setConfig(settings.toPageConfig())
+        bridge.setFont(view, settings.toFontSpec())
+        client.blockTrackers = settings.blockTrackers
+        view.settings.textZoom = settings.uiScale
+        WebView.setWebContentsDebuggingEnabled(settings.devMode)
+        return applyDesktopMode(settings.desktopMode)
+    }
+
+    private fun applyDesktopMode(enabled: Boolean): Boolean {
         if (desktopMode == enabled) return false
         val changed = desktopMode != null
         desktopMode = enabled
@@ -71,8 +92,10 @@ class YandexWebView(context: Context, container: AppContainer) {
         return changed
     }
 
-    fun loadStartPage() {
-        view.loadUrl(YandexMusicSite.START_URL)
+    /** Открывает ссылку music.yandex.* (например, из «Поделиться»), иначе — главную. */
+    fun loadStartPage(deepLink: Uri? = null) {
+        val target = deepLink?.takeIf(YandexMusicSite::isMusicOrigin)?.toString() ?: YandexMusicSite.START_URL
+        view.loadUrl(target)
     }
 
     fun destroy() {

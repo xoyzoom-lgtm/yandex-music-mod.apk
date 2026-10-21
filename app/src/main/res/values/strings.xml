@@ -2,14 +2,39 @@
 <resources>
     <string name="app_name">YM Mod</string>
 
-    <!-- Главный экран -->
-    <string name="action_reload">Обновить страницу</string>
-    <string name="action_settings">Настройки</string>
+    <!-- Общие -->
+    <string name="action_reload">Перезагрузить страницу</string>
     <string name="action_back">Назад</string>
+    <string name="action_apply">Применить</string>
+    <string name="action_retry">Повторить</string>
+    <string name="action_mod_menu">Меню YM Mod</string>
     <string name="nothing_playing">Ничего не играет</string>
+    <string name="checking">Проверка…</string>
+    <string name="error_with_message">Ошибка: %1$s</string>
+    <string name="share_target_label">Открыть в YM Mod</string>
+    <string name="shortcut_mod_settings_short">Настройки мода</string>
+    <string name="shortcut_mod_settings_long">Настройки YM Mod</string>
 
-    <!-- Настройки -->
-    <string name="settings_title">Настройки</string>
+    <!-- Первый запуск -->
+    <string name="onboarding_title">Где настройки мода</string>
+    <string name="onboarding_text">Приложение выглядит как обычная Яндекс Музыка. Меню мода открывается:\n\n• в настройках Яндекс Музыки — кнопка «YM Mod — настройки мода»;\n• долгим нажатием на иконку приложения → «Настройки мода»;\n• плавающей кнопкой, если включить её в меню мода.</string>
+    <string name="onboarding_ok">Понятно</string>
+    <string name="onboarding_open">Открыть меню</string>
+
+    <!-- Меню мода -->
+    <string name="settings_title">YM Mod</string>
+    <string name="settings_where_menu">Это меню также открывается из настроек Яндекс Музыки и долгим нажатием на иконку приложения.</string>
+
+    <string name="settings_section_player">Плеер</string>
+    <string name="settings_auto_quality">Высокое качество по умолчанию</string>
+    <string name="settings_auto_quality_hint">Выбирает «Высокое» в настройке качества плеера. Доступное качество зависит от вашей подписки.</string>
+    <string name="settings_hide_app_promo">Не показывать «Скачайте приложение»</string>
+    <string name="settings_hide_app_promo_hint">Окно с предложением установить официальное приложение.</string>
+    <string name="settings_block_trackers">Блокировать счётчики аналитики</string>
+    <string name="settings_block_trackers_hint">Яндекс Метрика не загружается. На воспроизведение и рекомендации не влияет.</string>
+    <string name="settings_open_lyrics">Текст текущего трека (LRCLIB)</string>
+    <string name="settings_open_lyrics_hint">Синхронизированный текст из открытой базы lrclib.net — пригодится, если в Яндекс Музыке текста нет.</string>
+
     <string name="settings_section_appearance">Оформление</string>
     <string name="settings_theme">Тема приложения</string>
     <string name="theme_system">Как в системе</string>
@@ -25,10 +50,15 @@
     <string name="font_custom">Свой шрифт (Bunny Fonts)</string>
     <string name="settings_custom_font_label">Название шрифта</string>
     <string name="settings_custom_font_hint">Например, JetBrains Mono. Шрифт загружается с fonts.bunny.net.</string>
-    <string name="action_apply">Применить</string>
-    <string name="settings_section_site">Сайт</string>
-    <string name="settings_desktop_mode">Полная (десктопная) версия</string>
-    <string name="settings_desktop_mode_hint">Страница перезагрузится.</string>
+    <string name="settings_ui_scale">Масштаб текста: %1$d%%</string>
+    <string name="settings_ui_scale_hint">Как «произвольный масштаб» в PulseSync: 75–150%.</string>
+    <string name="settings_snow">Снег</string>
+    <string name="settings_snow_hint">Падающий снег поверх страницы.</string>
+    <string name="settings_desktop_mode">Полная (десктопная) версия сайта</string>
+    <string name="settings_desktop_mode_hint">Как «Версия для ПК» в браузере. Страница перезагрузится.</string>
+    <string name="settings_floating_button">Плавающая кнопка меню мода</string>
+    <string name="settings_floating_button_hint">Маленькая кнопка поверх сайта, её можно перетащить.</string>
+
     <string name="settings_section_discord">Discord</string>
     <string name="settings_discord_enabled">Показывать трек в профиле Discord</string>
     <string name="settings_discord_status">Статус: %1$s</string>
@@ -38,19 +68,77 @@
     <string name="discord_status_connecting">подключение…</string>
     <string name="discord_status_connected">подключено</string>
     <string name="discord_status_error">ошибка: %1$s</string>
-    <string name="settings_about">О программе</string>
+
+    <string name="settings_section_lastfm">Last.fm</string>
+    <string name="lastfm_hint">Скробблинг: трек отправляется в Last.fm, когда прослушана половина (или 4 минуты). Нужен свой ключ API — его можно бесплатно создать на сайте Last.fm. Пароль не сохраняется.</string>
+    <string name="lastfm_create_key">Создать ключ API на last.fm</string>
+    <string name="lastfm_api_key">API key</string>
+    <string name="lastfm_api_secret">Shared secret</string>
+    <string name="lastfm_username">Логин Last.fm</string>
+    <string name="lastfm_password">Пароль Last.fm</string>
+    <string name="lastfm_login">Войти</string>
+    <string name="lastfm_logging_in">Вход…</string>
+    <string name="lastfm_login_error">Не удалось войти: %1$s</string>
+    <string name="lastfm_enabled">Скробблить в Last.fm</string>
+    <string name="lastfm_logged_in">Аккаунт: %1$s. Статус: %2$s</string>
+    <string name="lastfm_logout">Выйти из Last.fm</string>
+    <string name="lastfm_status_off">выключено</string>
+    <string name="lastfm_status_ready">готово</string>
+    <string name="lastfm_status_scrobbled">отправлено «%1$s»</string>
+    <string name="lastfm_status_error">ошибка: %1$s</string>
+
+    <string name="settings_section_tools">Инструменты</string>
+    <string name="likes_title">Перенести треки из плейлиста</string>
+    <string name="likes_hint">Мод поставит лайк каждому треку плейлиста — так можно перенести музыку с другого аккаунта. Плейлист должен быть публичным.</string>
+    <string name="likes_playlist_url">Ссылка на плейлист</string>
+    <string name="likes_start">Перенести треки</string>
+    <string name="likes_stop">Стоп</string>
+    <string name="settings_collection_link">Скопировать ссылку на «Мне нравится»</string>
+    <string name="settings_collection_link_hint">Делает вашу коллекцию публичной и копирует ссылку на неё — её можно открыть на другом аккаунте и перенести треки.</string>
+    <string name="collection_link_copied">Ссылка на «Мне нравится» скопирована</string>
+    <string name="region_check">Проверить регион</string>
+    <string name="region_hint">Яндекс Музыка работает только в некоторых странах. Проверка определяет страну по IP через api.country.is.</string>
+    <string name="region_ok">Страна: %1$s — Яндекс Музыка доступна.</string>
+    <string name="region_blocked">Страна: %1$s — Яндекс Музыка здесь недоступна. Отключите VPN или выберите в нём одну из разрешённых стран.</string>
+    <string name="region_unknown">Не удалось определить страну.</string>
+
+    <string name="settings_section_dev">Для разработчиков</string>
+    <string name="settings_dev_mode">Режим разработчика</string>
+    <string name="settings_dev_mode_hint">Отладка страницы с компьютера: Chrome → chrome://inspect.</string>
+    <string name="settings_save_snapshot">Сохранить разметку страницы</string>
+    <string name="settings_save_snapshot_hint">Сохраняет HTML открытого экрана (без скриптов и введённых данных) в файл — пришлите его разработчику, если что-то на сайте не работает.</string>
+    <string name="snapshot_saved">Разметка страницы сохранена</string>
+    <string name="snapshot_failed">Не удалось сохранить файл</string>
+    <string name="snapshot_no_picker">Нет приложения для сохранения файлов</string>
     <string name="settings_debug_fixtures">Отладка: фикстуры плеера</string>
+
+    <string name="settings_section_updates">Обновления</string>
+    <string name="update_current">Установлена версия %1$s</string>
+    <string name="update_check">Проверить обновления</string>
+    <string name="update_none">Установлена последняя версия.</string>
+    <string name="update_available">Доступна версия %1$s</string>
+    <string name="update_download">Скачать</string>
+    <string name="settings_about">О программе</string>
+
+    <!-- Текст песни -->
+    <string name="lyrics_title">Текст песни</string>
+    <string name="lyrics_nothing_playing">Сейчас ничего не играет.</string>
+    <string name="lyrics_not_found">Текст этого трека не найден в LRCLIB.</string>
+    <string name="lyrics_instrumental">Это инструментальный трек.</string>
+    <string name="lyrics_error">Не удалось загрузить текст: %1$s</string>
+    <string name="lyrics_source">Тексты: lrclib.net</string>
 
     <!-- О программе -->
     <string name="about_title">О программе</string>
     <string name="about_version">Версия %1$s</string>
-    <string name="about_description">Неофициальный Android-клиент для веб-версии Яндекс Музыки с интеграцией Discord, выбором шрифтов и тёмной темой.</string>
-    <string name="about_based_on_title">Основано на проекте</string>
-    <string name="about_based_on">Идея и часть логики взяты из десктопного мода Vzlomhik2005/Yandex-Music-Mod (лицензия MIT) и переделаны под Android.</string>
+    <string name="about_description">Неофициальный Android-клиент Яндекс Музыки с функциями мода: Discord, Last.fm, тексты LRCLIB, шрифты, масштаб, высокое качество по умолчанию.</string>
+    <string name="about_based_on_title">Основано на проектах</string>
+    <string name="about_based_on">Идеи и часть логики взяты из десктопных модов Vzlomhik2005/Yandex-Music-Mod и PulseSync-mod (оба — лицензия MIT) и переделаны под Android. Код PulseSync-mod не копировался.</string>
     <string name="about_original_repo">Открыть оригинальный репозиторий</string>
+    <string name="about_pulsesync_repo">Открыть PulseSync-mod</string>
     <string name="about_this_repo">Открыть репозиторий Android-версии</string>
     <string name="about_disclaimer_title">Важно</string>
-    <string name="about_disclaimer">Приложение не связано с ООО «Яндекс» и Discord Inc. Оно открывает официальную веб-версию Яндекс Музыки: вход выполняется через Яндекс ID, а качество звука, реклама и доступ к трекам определяются вашей подпиской.</string>
+    <string name="about_disclaimer">Приложение не связано с ООО «Яндекс», Discord Inc. и Last.fm. Оно открывает официальную веб-версию Яндекс Музыки: вход выполняется через Яндекс ID, а качество звука, реклама и доступ к трекам определяются вашей подпиской. Обхода Яндекс Плюса и скачивания треков нет.</string>
     <string name="about_licenses_title">Лицензии</string>
     <string name="about_license_this">Лицензия этого приложения (MIT)</string>
     <string name="about_license_original">Лицензия оригинального проекта (MIT)</string>
@@ -62,4 +150,5 @@
     <string name="notification_action_play">Играть</string>
     <string name="notification_action_pause">Пауза</string>
     <string name="notification_action_next">Следующий</string>
+    <string name="notification_action_like">Нравится</string>
 </resources>

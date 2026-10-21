@@ -38,6 +38,11 @@ object PlayerMessageParser {
             positionMs = payload.optLong("positionMs", 0).coerceAtLeast(0),
             durationMs = payload.optLong("durationMs", 0).coerceAtLeast(0),
             updatedAtMs = receivedAtMs,
+            liked = when (payload.optString("liked")) {
+                "yes" -> true
+                "no" -> false
+                else -> null
+            },
         )
     }
 

@@ -19,6 +19,8 @@ data class PlayerState(
     val positionMs: Long,
     val durationMs: Long,
     val updatedAtMs: Long,
+    /** Стоит ли лайк текущему треку; null — сайт этого не сообщил. */
+    val liked: Boolean? = null,
 ) {
     fun estimatedPositionMs(nowMs: Long): Long {
         val position = if (isPlaying) positionMs + (nowMs - updatedAtMs) else positionMs

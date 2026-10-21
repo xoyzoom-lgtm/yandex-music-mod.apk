@@ -34,6 +34,25 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- Ссылки на треки, альбомы и плейлисты можно открывать в приложении
+                 (на Android 12+ включается в «Открывать по умолчанию»). -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" />
+                <data android:host="music.yandex.ru" />
+                <data android:host="music.yandex.by" />
+                <data android:host="music.yandex.kz" />
+                <data android:host="music.yandex.uz" />
+                <data android:host="music.yandex.com" />
+            </intent-filter>
+            <!-- «Поделиться» ссылкой на Яндекс Музыку из других приложений. -->
+            <intent-filter android:label="@string/share_target_label">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
 
         <service
