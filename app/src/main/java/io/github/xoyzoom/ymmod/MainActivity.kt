@@ -48,6 +48,7 @@ import io.github.xoyzoom.ymmod.scrobble.LastFmClient
 import io.github.xoyzoom.ymmod.settings.AppSettings
 import io.github.xoyzoom.ymmod.settings.ThemeMode
 import io.github.xoyzoom.ymmod.ui.about.AboutScreen
+import io.github.xoyzoom.ymmod.ui.diagnostics.DiagnosticsPanel
 import io.github.xoyzoom.ymmod.ui.lyrics.LyricsScreen
 import io.github.xoyzoom.ymmod.ui.player.PlayerScreen
 import io.github.xoyzoom.ymmod.ui.settings.CheckResult
@@ -264,6 +265,18 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun shareText(text: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+            .setType("text/plain")
+            .putExtra(Intent.EXTRA_TEXT, text)
+        try {
+            startActivity(Intent.createChooser(intent, getString(R.string.diagnostics_share)))
+        } catch (_: ActivityNotFoundException) {
+            copyToClipboard(text)
+            toast(getString(R.string.diagnostics_copied))
+        }
+    }
+
     private fun copyToClipboard(text: String) {
         getSystemService(ClipboardManager::class.java)?.setPrimaryClip(ClipData.newPlainText("YM Mod", text))
     }
@@ -322,7 +335,11 @@ class MainActivity : ComponentActivity() {
         },
         reloadPage = {
             screen = Screen.WEB
-            web.view.reload()
+            web.reload()
+        },
+        openDiagnostics = {
+            screen = Screen.WEB
+            web.showDiagnostics()
         },
         openAbout = { screen = Screen.ABOUT },
         openDebug = if (DebugTools.AVAILABLE) ({ screen = Screen.DEBUG }) else null,
@@ -338,6 +355,8 @@ class MainActivity : ComponentActivity() {
         val scrobbleStatus by container.scrobbler.status.collectAsStateWithLifecycle()
         val likes by container.pageEvents.likes.collectAsStateWithLifecycle()
         val pageBackground by container.pageEvents.pageBackground.collectAsStateWithLifecycle()
+        val diagnostics by web.diagnostics.state.collectAsStateWithLifecycle()
+        val safeMode by web.safeMode.collectAsStateWithLifecycle()
         val scope = rememberCoroutineScope()
         val actions = settingsActions(container) { block -> scope.launch { block() } }
 
@@ -395,6 +414,18 @@ class MainActivity : ComponentActivity() {
                         )
                         Screen.ABOUT -> AboutScreen(onBack = { screen = Screen.SETTINGS })
                         Screen.DEBUG -> DebugTools.Screen(container, onBack = { screen = Screen.SETTINGS })
+                    }
+
+                    if (diagnostics.visible && screen == Screen.WEB) {
+                        DiagnosticsPanel(
+                            report = web.diagnostics.report(safeMode),
+                            automatic = diagnostics.automatic,
+                            safeMode = safeMode,
+                            onReload = web::reload,
+                            onToggleSafeMode = { web.setSafeMode(!safeMode) },
+                            onShare = { shareText(web.diagnostics.report(safeMode)) },
+                            onClose = web.diagnostics::hide,
+                        )
                     }
 
                     if (!settings.onboardingShown) {

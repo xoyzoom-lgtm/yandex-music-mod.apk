@@ -94,6 +94,7 @@ class SettingsActions(
     val setDevMode: (Boolean) -> Unit,
     val saveSnapshot: () -> Unit,
     val reloadPage: () -> Unit,
+    val openDiagnostics: () -> Unit,
     val openAbout: () -> Unit,
     val openDebug: (() -> Unit)?,
     val back: () -> Unit,
@@ -212,6 +213,10 @@ fun SettingsScreen(settings: AppSettings, status: SettingsStatus, actions: Setti
             checked = settings.devMode,
             onCheckedChange = actions.setDevMode,
         )
+        OutlinedButton(onClick = actions.openDiagnostics, modifier = Modifier.padding(top = 8.dp)) {
+            Text(stringResource(R.string.settings_diagnostics))
+        }
+        Hint(stringResource(R.string.settings_diagnostics_hint))
         OutlinedButton(onClick = actions.saveSnapshot, modifier = Modifier.padding(top = 8.dp)) {
             Text(stringResource(R.string.settings_save_snapshot))
         }

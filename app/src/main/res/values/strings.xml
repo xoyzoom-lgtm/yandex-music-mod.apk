@@ -105,6 +105,17 @@
     <string name="settings_section_dev">Для разработчиков</string>
     <string name="settings_dev_mode">Режим разработчика</string>
     <string name="settings_dev_mode_hint">Отладка страницы с компьютера: Chrome → chrome://inspect.</string>
+    <string name="settings_diagnostics">Диагностика страницы</string>
+    <string name="settings_diagnostics_hint">Показывает, что сейчас на странице, ошибки загрузки и версию WebView. Окно открывается и само, если сайт не загрузился.</string>
+    <string name="diagnostics_title">Диагностика страницы</string>
+    <string name="diagnostics_title_stuck">Сайт не загрузился</string>
+    <string name="diagnostics_hint">Сделайте скриншот этого окна или нажмите «Поделиться» и отправьте текст разработчику. Кнопка «Открыть без мода» покажет, виноват ли мод.</string>
+    <string name="diagnostics_hint_safe_mode">Сейчас сайт открыт без мода, как в обычном браузере. Если и так пусто — дело не в моде.</string>
+    <string name="diagnostics_safe_mode">Открыть без мода</string>
+    <string name="diagnostics_enable_mod">Вернуть мод</string>
+    <string name="diagnostics_share">Поделиться</string>
+    <string name="diagnostics_close">Закрыть</string>
+    <string name="diagnostics_copied">Диагностика скопирована</string>
     <string name="settings_save_snapshot">Сохранить разметку страницы</string>
     <string name="settings_save_snapshot_hint">Сохраняет HTML открытого экрана (без скриптов и введённых данных) в файл — пришлите его разработчику, если что-то на сайте не работает.</string>
     <string name="snapshot_saved">Разметка страницы сохранена</string>

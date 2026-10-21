@@ -8,18 +8,22 @@ import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
-import android.webkit.WebViewClient
+import androidx.webkit.WebResourceErrorCompat
+import androidx.webkit.WebViewClientCompat
+import androidx.webkit.WebViewFeature
 import java.io.ByteArrayInputStream
 import java.net.URISyntaxException
 
 class YandexWebViewClient(
     private val bridge: BridgeController,
+    private val diagnostics: PageDiagnostics,
     private val onNewPage: () -> Unit,
-) : WebViewClient() {
+    private val onLoaded: () -> Unit,
+) : WebViewClientCompat() {
 
     /** Читается из потока WebView, поэтому volatile. */
     @Volatile
-    var blockTrackers: Boolean = true
+    var blockTrackers: Boolean = false
 
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
         val uri = request.url
@@ -52,7 +56,26 @@ class YandexWebViewClient(
     override fun onPageFinished(view: WebView, url: String?) {
         super.onPageFinished(view, url)
         bridge.onPageFinished(view, url)
+        onLoaded()
     }
+
+    override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceErrorCompat) {
+        super.onReceivedError(view, request, error)
+        val description = if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_RESOURCE_ERROR_GET_DESCRIPTION)) {
+            error.description.toString()
+        } else {
+            "ошибка сети"
+        }
+        diagnostics.onRequestFailed("${shortUrl(request.url)} — $description", request.isForMainFrame)
+    }
+
+    override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, errorResponse: WebResourceResponse) {
+        super.onReceivedHttpError(view, request, errorResponse)
+        diagnostics.onRequestFailed("${shortUrl(request.url)} — HTTP ${errorResponse.statusCode}", request.isForMainFrame)
+    }
+
+    /** Хост и путь без параметров: в них могут быть токены. */
+    private fun shortUrl(uri: Uri): String = "${uri.host.orEmpty()}${uri.path.orEmpty()}".take(120)
 
     private fun openIntentUri(view: WebView, url: String) {
         val intent = try {

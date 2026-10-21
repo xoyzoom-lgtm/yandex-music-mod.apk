@@ -109,3 +109,39 @@ class PageAndNetTest {
         assertNull(RegionChecker.parse("""{"country":""}"""))
     }
 }
+
+class PageDiagnosticsTest {
+    private val probeJson =
+        """{"url":"https://music.yandex.ru/","title":"T","readyState":"complete","elements":12,"textLength":0,""" +
+            """"text":"","loader":true,"background":"rgb(0, 0, 0)","width":400,"height":800,"modLoaded":true,""" +
+            """"errors":["load: script https://yastatic-net.ru/x.js"]}"""
+
+    @Test
+    fun parsesDoubleEncodedProbe() {
+        // evaluateJavascript возвращает строку JS, внутри которой JSON.
+        val raw = org.json.JSONObject.quote(probeJson)
+        val probe = io.github.xoyzoom.ymmod.web.PageProbe.parse(raw)!!
+        assertTrue(probe.loader)
+        assertTrue(probe.looksEmpty)
+        assertEquals(listOf("load: script https://yastatic-net.ru/x.js"), probe.errors)
+        assertNull(io.github.xoyzoom.ymmod.web.PageProbe.parse("null"))
+    }
+
+    @Test
+    fun showsAutomaticallyOnlyWhenStuck() {
+        val diagnostics = io.github.xoyzoom.ymmod.web.PageDiagnostics("130", "Honor 400")
+        diagnostics.onPageStarted()
+        diagnostics.onProbe(io.github.xoyzoom.ymmod.web.PageProbe.parse(probeJson), automaticCheck = true)
+        assertTrue(diagnostics.state.value.visible)
+        assertTrue(diagnostics.report(safeMode = false).contains("yastatic-net.ru"))
+
+        diagnostics.hide()
+        diagnostics.onProbe(io.github.xoyzoom.ymmod.web.PageProbe.parse(probeJson), automaticCheck = true)
+        assertFalse(diagnostics.state.value.visible)
+
+        val fine = probeJson.replace("\"textLength\":0", "\"textLength\":500").replace("\"loader\":true", "\"loader\":false")
+        diagnostics.onPageStarted()
+        diagnostics.onProbe(io.github.xoyzoom.ymmod.web.PageProbe.parse(fine), automaticCheck = true)
+        assertFalse(diagnostics.state.value.visible)
+    }
+}

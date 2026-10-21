@@ -30,6 +30,10 @@ class BridgeController(
     private var font: FontSpec = FontSpec.NONE
     private var config: PageConfig? = null
 
+    /** false — режим «без мода»: скрипт не внедряется, страница открывается как есть. */
+    var enabled: Boolean = true
+        private set
+
     @SuppressLint("RequiresFeature")
     fun install(webView: WebView) {
         this.webView = webView
@@ -58,23 +62,37 @@ class BridgeController(
     fun setConfig(config: PageConfig) {
         if (config == this.config) return
         this.config = config
+        registerScript()
+        webView?.evaluateJavascript("window.__ymmod && window.__ymmod.configure(${config.toJson()});", null)
+    }
+
+    /** Включает или выключает мод на странице; действует после перезагрузки. */
+    fun setEnabled(value: Boolean) {
+        if (value == enabled) return
+        enabled = value
+        registerScript()
+    }
+
+    @SuppressLint("RequiresFeature")
+    private fun registerScript() {
         val view = webView ?: return
-        if (documentStartSupported) {
-            documentStartHandler?.remove()
+        val config = config ?: return
+        documentStartHandler?.remove()
+        documentStartHandler = null
+        if (enabled && documentStartSupported) {
             documentStartHandler = WebViewCompat.addDocumentStartJavaScript(
                 view,
                 configPrefix(config) + script,
                 YandexMusicSite.ALLOWED_ORIGINS,
             )
         }
-        view.evaluateJavascript("window.__ymmod && window.__ymmod.configure(${config.toJson()});", null)
     }
 
     /** Вызывается из WebViewClient.onPageFinished. */
     fun onPageFinished(webView: WebView, url: String?) {
-        if (!YandexMusicSite.isMusicOrigin(url?.let(android.net.Uri::parse))) return
+        if (!enabled || !YandexMusicSite.isMusicOrigin(url?.let(android.net.Uri::parse))) return
         // Запасной путь для старых WebView: скрипт сам защищён от повторного запуска.
-        if (documentStartHandler == null) {
+        if (!documentStartSupported) {
             webView.evaluateJavascript(config?.let(::configPrefix).orEmpty() + script, null)
         }
         applyFont(webView)
