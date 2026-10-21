@@ -12,6 +12,7 @@ enum class PlayerCommand(val jsAction: String) {
     TOGGLE("toggle"),
     NEXT("nexttrack"),
     PREVIOUS("previoustrack"),
+    LIKE("like"),
 }
 
 /** Передаёт команды из уведомления/гарнитуры в активити, где живёт WebView. */
@@ -24,5 +25,16 @@ class PlayerCommandBus {
 
     fun send(command: PlayerCommand) {
         _commands.tryEmit(command)
+    }
+
+    private val _seeks = MutableSharedFlow<Long>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+    /** Перемотка с экрана блокировки / из уведомления, позиция в мс. */
+    val seeks: SharedFlow<Long> = _seeks.asSharedFlow()
+
+    fun seekTo(positionMs: Long) {
+        _seeks.tryEmit(positionMs)
     }
 }

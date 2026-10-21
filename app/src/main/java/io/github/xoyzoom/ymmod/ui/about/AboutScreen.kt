@@ -26,6 +26,7 @@ import io.github.xoyzoom.ymmod.ui.common.ScreenScaffold
 import io.github.xoyzoom.ymmod.ui.common.SectionTitle
 
 const val ORIGINAL_REPO_URL = "https://github.com/Vzlomhik2005/Yandex-Music-Mod"
+const val PULSESYNC_REPO_URL = "https://github.com/PulseSync-LLC/PulseSync-mod"
 const val THIS_REPO_URL = "https://github.com/xoyzoom-lgtm/yandex-music-mod.apk"
 
 @Composable
@@ -45,6 +46,9 @@ fun AboutScreen(onBack: () -> Unit) {
         Text(stringResource(R.string.about_based_on))
         TextButton(onClick = { uriHandler.openUri(ORIGINAL_REPO_URL) }) {
             Text(stringResource(R.string.about_original_repo))
+        }
+        TextButton(onClick = { uriHandler.openUri(PULSESYNC_REPO_URL) }) {
+            Text(stringResource(R.string.about_pulsesync_repo))
         }
         TextButton(onClick = { uriHandler.openUri(THIS_REPO_URL) }) {
             Text(stringResource(R.string.about_this_repo))
